@@ -4,6 +4,8 @@ const path = require('path');
 const { v4: uuidv4 } = require('uuid');  //Needed to create a unique id for each note
 const dbNotes = require('./db/db.json')
 
+const app = express();
+
 const PORT = process.env.PORT || 3001;
 
 // Middleware for parsing JSON and urlencoded form data
@@ -47,6 +49,9 @@ app.post('api/reviews', (req, res) => {
         });
     };
 });
+
+//Will add DELETE functionality in the future
+
 
 // GET Route for homepage (index.html)
 app.get('/', (req, res) =>

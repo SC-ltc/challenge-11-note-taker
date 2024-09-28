@@ -19,7 +19,7 @@ app.get('/api/notes', (req, res) => {
 });
 
 // POST request to add note
-app.post('api/reviews', (req, res) => {
+app.post('api/notes', (req, res) => {
 
     //Destructure for items in req.body
     const { title, text } = req.body;

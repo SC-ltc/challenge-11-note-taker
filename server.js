@@ -15,7 +15,10 @@ app.use(express.static('public'));
 
 // GET api/notes should read the db.json file and return all saved notes as JSON
 app.get('/api/notes', (req, res) => {
-    res.json(dbNotes)
+    fs.readFile(dbNotes, 'utf-8', (err,data) => {
+        if (err) throw err;
+        res.json(JSON.parse(data));
+    });
 });
 
 // POST request to add note
@@ -31,7 +34,7 @@ app.post('api/notes', (req, res) => {
     const newNote = {
       title,
       text,
-      id: uuid(),
+      id: uuidv4(),
     };
 
     // Obtain existing notes

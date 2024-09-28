@@ -19,35 +19,54 @@ app.get('/api/notes', (req, res) => {
 });
 
 // POST request to add note
+// Referenced Module 11, Activity 19 to troubleshoot this POST route
 app.post('api/notes', (req, res) => {
 
-    //Destructure for items in req.body
-    const { title, text } = req.body;
+  // Destructuring assignment for the items in req.body
+  const { title, text } = req.body;
 
-    if (title && text) {
-        const newNote = {
-            title,
-            text,
-            id: uuidv4()
-        };
-
-        // Obtain existing notes
-        fs.readFile('./db/db.json', 'utf-8', (err, data) => {
-            if (err) {
-                console.error(err);
-            } else {
-                // Convert string into JSON object
-                const parsedNotes = JSON.parse(data);
-                parsedNotes.push(newNote);
-
-                //Write updated notes back to the file
-                fs.writeFile('./db/db.json', JSON.stringify(parsedNotes), (err) => {
-                    console.error(err);
-                });
-                res.json('Successfully added new note');
-            };
-        });
+  // If all the required fields are present
+  if (title && text) {
+    // Variable for the object we will save
+    const newNote = {
+      title,
+      text,
+      id: uuid(),
     };
+
+    // Obtain existing notes
+    fs.readFile('./db/db.json', 'utf8', (err, data) => {
+      if (err) {
+        console.error(err);
+      } else {
+        // Convert string into JSON object
+        const parsedNotes = JSON.parse(data);
+
+        // Add a new review
+        parsedNotes.push(newNote);
+
+        // Write updated reviews back to the file
+        fs.writeFile(
+          './db/db.json',
+          JSON.stringify(parsedNotes, null, 2),
+          (writeErr) =>
+            writeErr
+              ? console.error(writeErr)
+              : console.info('Successfully updated notes')
+        );
+      }
+    });
+
+    const response = {
+      status: 'success',
+      body: newNote,
+    };
+
+    console.log(response);
+    res.status(201).json(response);
+  } else {
+    res.status(500).json('Error in posting new note');
+  }
 });
 
 //Will add DELETE functionality in the future

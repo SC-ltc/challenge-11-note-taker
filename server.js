@@ -2,7 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { v4: uuidv4 } = require('uuid');  //Needed to create a unique id for each note
-const dbNotes = require('./db/db.json')
+//const dbNotes = require('./db/db.json')
 
 const app = express();
 
@@ -15,7 +15,7 @@ app.use(express.static('public'));
 
 // GET api/notes should read the db.json file and return all saved notes as JSON
 app.get('/api/notes', (req, res) => {
-    fs.readFile(dbNotes, 'utf-8', (err,data) => {
+    fs.readFile('./db/db.json', 'utf-8', (err,data) => {
         if (err) throw err;
         res.json(JSON.parse(data));
     });
@@ -23,7 +23,7 @@ app.get('/api/notes', (req, res) => {
 
 // POST request to add note
 // Referenced Module 11, Activity 19 to troubleshoot this POST route
-app.post('api/notes', (req, res) => {
+app.post('/api/notes', (req, res) => {
 
   // Destructuring assignment for the items in req.body
   const { title, text } = req.body;
@@ -51,7 +51,7 @@ app.post('api/notes', (req, res) => {
         // Write updated reviews back to the file
         fs.writeFile(
           './db/db.json',
-          JSON.stringify(parsedNotes, null, 2),
+          JSON.stringify(parsedNotes, null, 0),
           (writeErr) =>
             writeErr
               ? console.error(writeErr)
